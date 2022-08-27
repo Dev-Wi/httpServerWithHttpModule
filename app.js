@@ -52,7 +52,24 @@ const httpRequestListener = function(request, response) {
                 });
                 response.writeHead(200, {"Content-Type" : "application/json"});
                 response.end(JSON.stringify({message : 'userCreated'}));
-                console.log(users)
+            });
+        }else if(url === "/httpie/post") {
+            let body = "";
+
+            request.on("data", (data) => {
+                body += data;
+            });
+
+            request.on("end", () => {
+                const post = JSON.parse(body);
+                posts.push({
+                    id: post.id,
+                    title: post.title,
+                    content: post.content,
+                    userID: post.userID,
+                });
+                response.writeHead(200, {"Content-Type" : "application/json"});
+                response.end(JSON.stringify({message : 'postCreated'}));
             });
         }
     }
